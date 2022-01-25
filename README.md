@@ -17,13 +17,13 @@ GIVEN a functional Express.js API:
 ## App Function
 This Express API app provides GET, POST, PUT, and DELETE routes to support the use of the ecommerce_db.  
 
-# E-Commerce Database
+### E-Commerce Database
 The database contains four tables called category, product, product_tag, and tag.  Product is linked to category through the category ID and tags through the product_tag ID.  The models for Category, Product, ProductTag, and Tag establish the structure of their respective tables and the models index.js provides the relationships between the models.
 
-# Seeds
+### Seeds
 A seed folder is provided to provide the initial data for the database.  The seed data can be populated using "npm run seed".
 
-# Model API Routes
+### Model API Routes
 There are three high-level API routes for categories, products, and tags which allow the user to:
 - View all categories, products, or tags
 - View a single category, product, or tag
