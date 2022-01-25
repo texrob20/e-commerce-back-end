@@ -21,8 +21,14 @@ router.get('/', (req, res) => {
       attributes: ['id', 'category_name'],
       },     
       {
-      model: Tag,
-      attributes: ['id', 'tag_name']
+      model: ProductTag,
+      attributes: ['id', 'tag_id'],
+      include: [
+        {
+        model: Tag,
+        attributes: ['id', 'tag_name']
+        }
+      ]
       },   
     ]
   })
@@ -54,8 +60,14 @@ router.get('/:id', (req, res) => {
       attributes: ['id', 'category_name'],
       },     
       {
-      model: Tag,
-      attributes: ['id', 'tag_name']
+      model: ProductTag,
+      attributes: ['id', 'tag_id'],
+      include: [
+        {
+        model: Tag,
+        attributes: ['id', 'tag_name']
+        }
+      ]
       },   
     ]
   })
@@ -86,6 +98,7 @@ router.post('/', (req, res) => {
     product_name: req.body.product_name,
     price: req.body.price,
     stock: req.body.stock,
+    category_id: req.body.category_id,
     tag_id: req.body.tagIds
     })
     .then((product) => {
