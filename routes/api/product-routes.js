@@ -10,13 +10,20 @@ router.get('/', (req, res) => {
   Product.findAll({
     attributes: [
         'id',
-        'product_name'
+        'product_name',
+        'price',
+        'stock',
+        'category_id'
       ],
     include: [
       {
-      model: Product,
-      attributes: ['id', 'product_name', 'price', 'category_id', 'created_at'],
-      },        
+      model: Category,
+      attributes: ['id', 'category_name'],
+      },     
+      {
+      model: Tag,
+      attributes: ['id', 'tag_name']
+      },   
     ]
   })
     .then(dbPostData => res.json(dbPostData))
@@ -30,6 +37,39 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
+  Product.findOne({
+    where: {
+      id: req.params.id
+    },
+    attributes: [
+        'id',
+        'product_name',
+        'price',
+        'stock',
+        'category_id'
+      ],
+    include: [
+      {
+      model: Category,
+      attributes: ['id', 'category_name'],
+      },     
+      {
+      model: Tag,
+      attributes: ['id', 'tag_name']
+      },   
+    ]
+  })
+  .then(dbPostData => {
+    if (!dbPostData) {
+      res.status(404).json({ message: 'No product found with this id' });
+      return;
+    }
+    res.json(dbPostData);
+  })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 // create new product
@@ -42,7 +82,12 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-  Product.create(req.body)
+  Product.create({
+    product_name: req.body.product_name,
+    price: req.body.price,
+    stock: req.body.stock,
+    tag_id: req.body.tagIds
+    })
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
